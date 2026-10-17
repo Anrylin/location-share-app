@@ -1,7 +1,7 @@
 name: iOS Build (unsigned IPA)
 
 # 无 Mac、无需本地装 Flutter：推送到 GitHub 后手动触发，
-# 云端 macOS 自动：生成工程 → 注入后台定位权限 → 编译无签名 ipa。
+# 云端 macOS 自动：生成工程 → 注入后台定位权限 + 占位 Team → 编译无签名 ipa。
 # 产物下载后交给第三方签名服务签名即可。
 #
 # 仓库根目录 = app/ 目录（lib/、pubspec.yaml、.github/ 都在仓库根）。
@@ -26,8 +26,9 @@ jobs:
       - name: 恢复源码（防覆盖）
         run: git checkout -- lib pubspec.yaml
 
-      # 注入 iOS 后台持续定位所需权限与声明
-      - name: 注入 iOS 后台定位配置
+      # 注入 iOS 配置：后台定位权限 + 占位 Team
+      # （--no-codesign 会跳过签名，但 Flutter 仍要求 team 非空，用占位值骗过校验）
+      - name: 注入 iOS 配置
         run: |
           python3 - <<'PY'
           p = 'ios/Runner/Info.plist'
@@ -49,8 +50,13 @@ jobs:
               s = s[:i] + '\n' + keys + s[i:]
               open(p, 'w', encoding='utf-8').write(s)
               print('Info.plist 已补丁')
-          else:
-              print('Info.plist 已含后台定位，跳过')
+
+          for xc in ['ios/Flutter/Release.xcconfig', 'ios/Flutter/Debug.xcconfig']:
+              c = open(xc, encoding='utf-8').read()
+              if 'DEVELOPMENT_TEAM' not in c:
+                  c += '\nDEVELOPMENT_TEAM=0000000000\n'
+                  open(xc, 'w', encoding='utf-8').write(c)
+                  print(xc + ' 已注入占位 Team')
           PY
 
       - name: 安装依赖
