@@ -1,0 +1,26 @@
+# Codemagic 配置 —— 无 Mac 远程构建 iOS
+# 用法见 docs/无Mac构建指南.md
+workflows:
+  ios-build:
+    name: iOS IPA
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    # 在 Codemagic 的 App 设置 → Environment variables 里加：
+    #   CODESIGN=0  → 出无签名 IPA（给第三方签名服务/自己重签）
+    #   CODESIGN=1  → 用你在 Codemagic「Code signing」里上传的证书自动签名
+    scripts:
+      - name: 安装依赖
+        script: flutter pub get
+      - name: 构建 IPA
+        script: |
+          if [ "$CODESIGN" = "1" ]; then
+            flutter build ipa --release
+          else
+            flutter build ipa --release --no-codesign
+          fi
+    artifacts:
+      - build/ios/ipa/*.ipa
