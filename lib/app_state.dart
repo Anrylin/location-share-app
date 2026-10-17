@@ -12,7 +12,7 @@ class AppState extends ChangeNotifier {
   String? roomCode;
   String? memberId;
   String? name;
-  String serverUrl = ApiClient.baseUrl;
+  String serverUrl = ApiClient.instance.baseUrl;
 
   bool get joined => roomCode != null && memberId != null;
 
