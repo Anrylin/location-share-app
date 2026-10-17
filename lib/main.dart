@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'app_state.dart';
+import 'pages/home_page.dart';
 import 'pages/login_page.dart';
-import 'pages/map_page.dart';
 import 'pages/setup_page.dart';
 
 void main() async {
@@ -35,7 +35,7 @@ class LocationApp extends StatelessWidget {
           final s = AppState.instance;
           if (!s.loggedIn) return const LoginPage();
           if (!s.joined) return const SetupPage();
-          return const MapPage();
+          return const HomePage();
         },
       ),
     );
