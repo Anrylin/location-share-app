@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_state.dart';
+import 'pages/login_page.dart';
 import 'pages/map_page.dart';
 import 'pages/setup_page.dart';
 
@@ -16,16 +17,24 @@ class LocationApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '位置共享',
+      title: '心动定位',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFE91E63)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFFF5A7D)),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFFFF5A7D),
+          foregroundColor: Colors.white,
+          centerTitle: true,
+        ),
       ),
       home: ListenableBuilder(
         listenable: AppState.instance,
         builder: (context, _) {
-          return AppState.instance.joined ? const MapPage() : const SetupPage();
+          final s = AppState.instance;
+          if (!s.loggedIn) return const LoginPage();
+          if (!s.joined) return const SetupPage();
+          return const MapPage();
         },
       ),
     );
