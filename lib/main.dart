@@ -21,9 +21,10 @@ class LocationApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFFF5A7D)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF6ADAFC)),
+        scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFFF5A7D),
+          backgroundColor: Color(0xFF6ADAFC),
           foregroundColor: Colors.white,
           centerTitle: true,
         ),
