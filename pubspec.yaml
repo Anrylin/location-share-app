@@ -1,0 +1,19 @@
+name: location_share
+description: 双人位置共享（原生版，支持后台持续定位上报）
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  geolocator: ^13.0.1
+  flutter_map: ^7.0.0
+  latlong2: ^0.9.0
+  http: ^1.2.0
+  shared_preferences: ^2.2.0
+
+flutter:
+  uses-material-design: true
