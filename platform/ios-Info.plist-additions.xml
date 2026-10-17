@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  加到 ios/Runner/Info.plist 的顶层 <dict> 内（直接复制下面这些 <key>...</key> 块）。
+  作用：定位权限描述 + 允许后台持续定位（UIBackgroundModes = location）。
+-->
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>用于在地图上显示你的位置</string>
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>用于在后台持续共享你的位置给配对的人</string>
+<key>NSLocationAlwaysUsageDescription</key>
+<string>用于在后台持续共享你的位置</string>
+<key>UIBackgroundModes</key>
+<array>
+	<string>location</string>
+</array>
