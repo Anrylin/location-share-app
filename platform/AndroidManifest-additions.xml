@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  加到 android/app/src/main/AndroidManifest.xml 的 <manifest> 标签内、
+  <application> 标签之前。作用：定位 + 后台定位 + 前台服务 + 联网权限。
+  （geolocator 会在自己的 manifest 里声明前台服务，这里只需权限。）
+-->
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+<uses-permission android:name="android.permission.WAKE_LOCK" />
