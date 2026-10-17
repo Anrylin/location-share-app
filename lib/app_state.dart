@@ -12,8 +12,11 @@ class AppState extends ChangeNotifier {
   String? roomCode;
   String? memberId;
   String? name;
+  String? accountToken;
+  String? username;
 
   bool get joined => roomCode != null && memberId != null;
+  bool get loggedIn => accountToken != null;
 
   Future<void> boot() async {
     try {
@@ -21,7 +24,48 @@ class AppState extends ChangeNotifier {
       roomCode = prefs.getString('roomCode');
       memberId = prefs.getString('memberId');
       name = prefs.getString('name');
+      accountToken = prefs.getString('accountToken');
+      username = prefs.getString('username');
     } catch (_) {}
+    notifyListeners();
+  }
+
+  Future<void> _persistAccount() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('accountToken', accountToken ?? '');
+      await prefs.setString('username', username ?? '');
+    } catch (_) {}
+  }
+
+  Future<String?> register(String u, String p) async {
+    final r = await api.post('/api/register', {'username': u, 'password': p});
+    if (r['ok'] == true) {
+      accountToken = r['token']?.toString();
+      username = r['username']?.toString();
+      await _persistAccount();
+      notifyListeners();
+      return null;
+    }
+    return r['error']?.toString() ?? '注册失败';
+  }
+
+  Future<String?> login(String u, String p) async {
+    final r = await api.post('/api/login', {'username': u, 'password': p});
+    if (r['ok'] == true) {
+      accountToken = r['token']?.toString();
+      username = r['username']?.toString();
+      await _persistAccount();
+      notifyListeners();
+      return null;
+    }
+    return r['error']?.toString() ?? '登录失败';
+  }
+
+  Future<void> logoutAccount() async {
+    accountToken = null;
+    username = null;
+    await _persistAccount();
     notifyListeners();
   }
 
