@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../app_state.dart';
 
-/// LinkUp 风格配对页：粉渐变背景 + 白色圆角卡片。
+/// LinkUp 风格配对页：天蓝渐变背景 + 白色圆角卡片。
 class SetupPage extends StatefulWidget {
   const SetupPage({super.key});
 
@@ -40,7 +40,7 @@ class _SetupPageState extends State<SetupPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFFFF5A7D), Color(0xFFFF8FB2)],
+            colors: [Color(0xFF9BE7FF), Color(0xFF5ECBFA)],
           ),
         ),
         child: SafeArea(
@@ -50,15 +50,12 @@ class _SetupPageState extends State<SetupPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('📍', style: TextStyle(fontSize: 56)),
-                  const SizedBox(height: 8),
-                  const Text('绑定位置',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
+                  Image.asset('assets/images/logo_white.png', height: 72),
+                  const SizedBox(height: 12),
+                  Text('你好，$_displayName', style: const TextStyle(color: Colors.white, fontSize: 15)),
                   const SizedBox(height: 4),
-                  Text('你好，$_displayName', style: const TextStyle(color: Colors.white70)),
-                  const SizedBox(height: 8),
                   const Text('一个人创建配对码，另一个人输入同一个码加入',
-                      textAlign: TextAlign.center, style: TextStyle(color: Colors.white70, fontSize: 13)),
+                      textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 13)),
                   const SizedBox(height: 24),
                   Card(
                     elevation: 0,
@@ -85,7 +82,7 @@ class _SetupPageState extends State<SetupPage> {
                                   : () => _run(() => AppState.instance
                                       .create(_name.text.trim().isEmpty ? _displayName : _name.text.trim())),
                               style: FilledButton.styleFrom(
-                                backgroundColor: const Color(0xFFFF5A7D),
+                                backgroundColor: const Color(0xFF573E2E),
                                 padding: const EdgeInsets.symmetric(vertical: 14),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                               ),
@@ -116,7 +113,7 @@ class _SetupPageState extends State<SetupPage> {
                                   : () => _run(() => AppState.instance
                                       .join(_code.text.trim(), _name.text.trim().isEmpty ? _displayName : _name.text.trim())),
                               style: OutlinedButton.styleFrom(
-                                foregroundColor: const Color(0xFFFF5A7D),
+                                foregroundColor: const Color(0xFF573E2E),
                                 padding: const EdgeInsets.symmetric(vertical: 14),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                               ),
@@ -136,7 +133,7 @@ class _SetupPageState extends State<SetupPage> {
                   ),
                   const SizedBox(height: 4),
                   const Text('首次进入会请求定位权限，请选「始终允许」',
-                      textAlign: TextAlign.center, style: TextStyle(color: Colors.white70, fontSize: 12)),
+                      textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 12)),
                 ],
               ),
             ),
