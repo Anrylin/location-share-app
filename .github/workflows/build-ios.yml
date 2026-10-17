@@ -1,0 +1,65 @@
+name: iOS Build (unsigned IPA)
+
+# 无 Mac、无需本地装 Flutter：推送到 GitHub 后手动触发，
+# 云端 macOS 自动：生成工程 → 注入后台定位权限 → 编译无签名 ipa。
+# 产物下载后交给第三方签名服务签名即可。
+#
+# 仓库根目录 = app/ 目录（lib/、pubspec.yaml、.github/ 都在仓库根）。
+on:
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      # 生成 ios/android 平台目录（不覆盖已有的 lib/ 和 pubspec.yaml）
+      - name: 生成平台工程
+        run: flutter create --org com.linkupclone --project-name location_share .
+
+      # 保险：若 flutter create 意外覆盖了源码，从 git 恢复
+      - name: 恢复源码（防覆盖）
+        run: git checkout -- lib pubspec.yaml
+
+      # 注入 iOS 后台持续定位所需权限与声明
+      - name: 注入 iOS 后台定位配置
+        run: |
+          python3 - <<'PY'
+          p = 'ios/Runner/Info.plist'
+          s = open(p, encoding='utf-8').read()
+          keys = '''
+          \t<key>NSLocationWhenInUseUsageDescription</key>
+          \t<string>用于在地图上显示你的位置</string>
+          \t<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+          \t<string>用于在后台持续共享你的位置给配对的人</string>
+          \t<key>NSLocationAlwaysUsageDescription</key>
+          \t<string>用于在后台持续共享你的位置</string>
+          \t<key>UIBackgroundModes</key>
+          \t<array>
+          \t\t<string>location</string>
+          \t</array>
+          '''
+          if 'UIBackgroundModes' not in s:
+              i = s.index('<dict>') + len('<dict>')
+              s = s[:i] + '\n' + keys + s[i:]
+              open(p, 'w', encoding='utf-8').write(s)
+              print('Info.plist 已补丁')
+          else:
+              print('Info.plist 已含后台定位，跳过')
+          PY
+
+      - name: 安装依赖
+        run: flutter pub get
+
+      - name: 编译无签名 IPA
+        run: flutter build ipa --release --no-codesign
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-unsigned-ipa
+          path: build/ios/ipa/*.ipa
