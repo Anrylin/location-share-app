@@ -12,7 +12,6 @@ class AppState extends ChangeNotifier {
   String? roomCode;
   String? memberId;
   String? name;
-  String serverUrl = ApiClient.instance.baseUrl;
 
   bool get joined => roomCode != null && memberId != null;
 
@@ -22,26 +21,6 @@ class AppState extends ChangeNotifier {
       roomCode = prefs.getString('roomCode');
       memberId = prefs.getString('memberId');
       name = prefs.getString('name');
-      final s = prefs.getString('serverUrl');
-      if (s != null && s.isNotEmpty) serverUrl = s;
-      api.baseUrl = serverUrl;
-    } catch (_) {}
-    notifyListeners();
-  }
-
-  /// 修改后端地址（改隧道地址后无需重新编译）。
-  Future<void> setServer(String url) async {
-    var u = url.trim();
-    if (u.isEmpty) return;
-    if (!u.startsWith('http')) u = 'http://$u';
-    while (u.endsWith('/')) {
-      u = u.substring(0, u.length - 1);
-    }
-    serverUrl = u;
-    api.baseUrl = u;
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('serverUrl', u);
     } catch (_) {}
     notifyListeners();
   }
