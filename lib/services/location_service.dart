@@ -36,9 +36,8 @@ class LocationService {
         accuracy: LocationAccuracy.high,
         distanceFilter: 10,
         allowBackgroundLocationUpdates: true,
-        pausesLocationUpdatesAutomatically: false,
         showBackgroundLocationIndicator: true,
-        activityType: ActivityType.otherNavigation,
+        activityType: ActivityType.other,
       );
     }
     return Geolocator.getPositionStream(locationSettings: settings);
