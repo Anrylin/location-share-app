@@ -76,27 +76,35 @@ class AppState extends ChangeNotifier {
   }
 
   Future<String?> register(String u, String p) async {
-    final r = await api.post('/api/register', {'username': u, 'password': p});
-    if (r['ok'] == true) {
-      accountToken = r['token']?.toString();
-      username = r['username']?.toString();
-      await _persistAccount();
-      notifyListeners();
-      return null;
+    try {
+      final r = await api.post('/api/register', {'username': u, 'password': p});
+      if (r['ok'] == true) {
+        accountToken = r['token']?.toString();
+        username = r['username']?.toString();
+        await _persistAccount();
+        notifyListeners();
+        return null;
+      }
+      return r['error']?.toString() ?? '注册失败';
+    } catch (_) {
+      return '无法连接服务器，请检查网络';
     }
-    return r['error']?.toString() ?? '注册失败';
   }
 
   Future<String?> login(String u, String p) async {
-    final r = await api.post('/api/login', {'username': u, 'password': p});
-    if (r['ok'] == true) {
-      accountToken = r['token']?.toString();
-      username = r['username']?.toString();
-      await _persistAccount();
-      notifyListeners();
-      return null;
+    try {
+      final r = await api.post('/api/login', {'username': u, 'password': p});
+      if (r['ok'] == true) {
+        accountToken = r['token']?.toString();
+        username = r['username']?.toString();
+        await _persistAccount();
+        notifyListeners();
+        return null;
+      }
+      return r['error']?.toString() ?? '登录失败';
+    } catch (_) {
+      return '无法连接服务器，请检查网络';
     }
-    return r['error']?.toString() ?? '登录失败';
   }
 
   Future<void> logoutAccount() async {
@@ -116,31 +124,39 @@ class AppState extends ChangeNotifier {
   }
 
   Future<String?> create(String n) async {
-    final r = await api.post('/api/join', {'code': '', 'name': n, 'memberId': ''});
-    if (r['ok'] == true) {
-      roomCode = r['room']['code']?.toString();
-      memberId = r['memberId']?.toString();
-      name = n;
-      await _save();
-      startLocation();
-      notifyListeners();
-      return null;
+    try {
+      final r = await api.post('/api/join', {'code': '', 'name': n, 'memberId': ''});
+      if (r['ok'] == true) {
+        roomCode = r['room']['code']?.toString();
+        memberId = r['memberId']?.toString();
+        name = n;
+        await _save();
+        startLocation();
+        notifyListeners();
+        return null;
+      }
+      return r['error']?.toString() ?? '创建失败';
+    } catch (_) {
+      return '无法连接服务器，请检查网络';
     }
-    return r['error']?.toString() ?? '创建失败';
   }
 
   Future<String?> join(String code, String n) async {
-    final r = await api.post('/api/join', {'code': code, 'name': n, 'memberId': ''});
-    if (r['ok'] == true) {
-      roomCode = code.toUpperCase();
-      memberId = r['memberId']?.toString();
-      name = n;
-      await _save();
-      startLocation();
-      notifyListeners();
-      return null;
+    try {
+      final r = await api.post('/api/join', {'code': code, 'name': n, 'memberId': ''});
+      if (r['ok'] == true) {
+        roomCode = code.toUpperCase();
+        memberId = r['memberId']?.toString();
+        name = n;
+        await _save();
+        startLocation();
+        notifyListeners();
+        return null;
+      }
+      return r['error']?.toString() ?? '加入失败';
+    } catch (_) {
+      return '无法连接服务器，请检查网络';
     }
-    return r['error']?.toString() ?? '加入失败';
   }
 
   Future<Map<String, dynamic>> report(double lat, double lng, double acc, bool moving) {
