@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../app_state.dart';
 
-/// LinkUp 风格登录/注册页：粉渐变背景 + 白色圆角卡片 + 登录/注册切换。
+/// LinkUp 风格登录/注册页：天蓝渐变背景 + 白色圆角卡片 + 深棕按钮。
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color: selected ? const Color(0xFFFF5A7D) : Colors.grey.shade100,
+          color: selected ? const Color(0xFF573E2E) : Colors.grey.shade100,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFFFF5A7D), Color(0xFFFF8FB2)],
+            colors: [Color(0xFF9BE7FF), Color(0xFF5ECBFA)],
           ),
         ),
         child: SafeArea(
@@ -79,12 +79,9 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('💗', style: TextStyle(fontSize: 64)),
-                  const SizedBox(height: 8),
-                  const Text('心动定位',
-                      style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white)),
-                  const SizedBox(height: 4),
-                  const Text('两个人的位置，随时可见', style: TextStyle(color: Colors.white70)),
+                  Image.asset('assets/images/logo_white.png', height: 88),
+                  const SizedBox(height: 12),
+                  const Text('两个人的位置，随时可见', style: TextStyle(color: Colors.white, fontSize: 15)),
                   const SizedBox(height: 28),
                   Card(
                     elevation: 0,
@@ -128,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                             child: FilledButton(
                               onPressed: _busy ? null : _go,
                               style: FilledButton.styleFrom(
-                                backgroundColor: const Color(0xFFFF5A7D),
+                                backgroundColor: const Color(0xFF573E2E),
                                 padding: const EdgeInsets.symmetric(vertical: 14),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                               ),
